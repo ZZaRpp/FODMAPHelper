@@ -146,7 +146,7 @@ a:hover {
 
 .navbar-content {
     display: flex;
-    justify-content: space-between;
+    gap: var(--spacing-lg);
     align-items: center;
     padding: var(--spacing-lg) 0;
 }
@@ -157,7 +157,7 @@ a:hover {
     gap: var(--spacing-md);
     font-weight: 600;
     color: var(--color-primary);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md);
     text-decoration: none;
 }
 
