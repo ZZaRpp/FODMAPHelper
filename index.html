@@ -2,930 +2,561 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Low FODMAP Diet Companion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>FODMAP Helper</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ============================================
+           FODMAP HELPER DESIGN SYSTEM
+           Extracted from logo:
+           - Forest green:   #4a7c59  (primary brand)
+           - Sage green:     #7aab8a  (secondary / borders)
+           - Light sage:     #e8f3ec  (backgrounds)
+           - Terracotta:     #c8624a  (danger / high FODMAP)
+           - Warm cream:     #faf8f4  (page bg)
+           - Charcoal:       #2d3b35  (headlines)
+           - Warm grey:      #6b7b74  (body text)
+           - Border light:   #dceee4  (dividers)
+        ============================================ */
+
+        :root {
+            --green-dark:   #3a6647;
+            --green-main:   #4a7c59;
+            --green-mid:    #5d9170;
+            --green-light:  #7aab8a;
+            --green-pale:   #c6e0cf;
+            --green-bg:     #e8f3ec;
+            --green-bg2:    #f0f7f2;
+
+            --terra:        #c8624a;
+            --terra-light:  #f5e6e2;
+            --terra-mid:    #e07860;
+
+            --amber:        #b87c2a;
+            --amber-light:  #fef6e6;
+
+            --cream:        #faf8f4;
+            --white:        #ffffff;
+
+            --charcoal:     #2d3b35;
+            --body:         #4a5e55;
+            --muted:        #6b7b74;
+            --border:       #dceee4;
+            --border-mid:   #c4d9cc;
+
+            --radius-sm:    6px;
+            --radius-md:    10px;
+            --radius-lg:    16px;
+            --radius-xl:    24px;
+
+            --shadow-sm:    0 1px 3px rgba(74,124,89,0.08);
+            --shadow-md:    0 4px 12px rgba(74,124,89,0.12);
         }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #ffffff;
-            color: #1f2937;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--cream);
+            color: var(--body);
+            min-height: 100vh;
+            font-size: 16px;
+            line-height: 1.5;
         }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-        }
-        
-        /* Header */
+
+        /* ─── LAYOUT ─── */
+        .app { max-width: 600px; margin: 0 auto; background: var(--white); min-height: 100vh; position: relative; }
+
+        /* ─── HEADER ─── */
         .header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
+            position: sticky; top: 0; z-index: 100;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
         }
-        
-        .header-content {
-            padding: 1rem;
+        .header-top {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px 10px;
         }
-        
-        .header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 0.25rem;
+        .logo-img { width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
+        .header-titles { flex: 1; }
+        .header-titles h1 {
+            font-size: 1.4rem; font-weight: 700;
+            color: var(--green-main); letter-spacing: -0.3px; line-height: 1.1;
         }
-        
-        .header p {
-            font-size: 0.75rem;
-            color: #6b7280;
+        .header-titles p { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+        /* ─── TABS ─── */
+        .tabs { display: flex; border-top: 1px solid var(--border); background: var(--white); }
+        .tab-btn {
+            flex: 1; border: none; background: none; cursor: pointer;
+            padding: 12px 4px 10px;
+            font-size: 0.75rem; font-weight: 600;
+            color: var(--muted);
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            letter-spacing: 0.2px;
         }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            border-top: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .tab-button {
-            flex: 1;
-            padding: 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: #6b7280;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .tab-button:hover {
-            color: #374151;
-        }
-        
-        .tab-button.active {
-            color: #1f2937;
-            border-bottom-color: #1f2937;
-        }
-        
-        /* Content */
-        .content {
-            padding: 1.5rem;
-            min-height: 60vh;
-        }
-        
-        .tab-pane {
-            display: none;
-        }
-        
-        .tab-pane.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        /* Info Boxes */
-        .info-box {
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
+        .tab-btn:hover { color: var(--green-main); }
+        .tab-btn.active { color: var(--green-main); border-bottom-color: var(--green-main); }
+
+        /* ─── CONTENT ─── */
+        .content { padding: 20px 16px 80px; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ─── INFO CARDS ─── */
+        .info-card {
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            margin-bottom: 16px;
             border-left: 4px solid;
         }
-        
-        .info-box.blue {
-            background: #eff6ff;
-            border-left-color: #60a5fa;
+        .info-card.green { background: var(--green-bg); border-color: var(--green-main); }
+        .info-card.green h3 { color: var(--green-dark); font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+        .info-card.green p { font-size: 0.83rem; color: var(--green-dark); line-height: 1.55; }
+        .info-card.amber { background: var(--amber-light); border-color: var(--amber); }
+        .info-card.amber p { font-size: 0.82rem; color: #7a5010; line-height: 1.55; }
+
+        /* ─── SECTION TITLE ─── */
+        .section-title {
+            font-size: 0.95rem; font-weight: 700; color: var(--charcoal);
+            margin-bottom: 12px; letter-spacing: -0.2px;
         }
-        
-        .info-box.blue h3 {
-            color: #1e3a8a;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+
+        /* ─── PHASE ITEMS ─── */
+        .phase-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .phase-item { display: flex; gap: 12px; }
+        .phase-dot {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: var(--green-bg); border: 2px solid var(--green-pale);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700; color: var(--green-main);
+            flex-shrink: 0; margin-top: 1px;
         }
-        
-        .info-box.blue p {
-            font-size: 0.875rem;
-            color: #1e40af;
+        .phase-body { flex: 1; }
+        .phase-body strong { font-size: 0.875rem; color: var(--charcoal); display: block; margin-bottom: 2px; }
+        .phase-body p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+        /* ─── TIPS ─── */
+        .tips-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .tip-item { display: flex; gap: 10px; font-size: 0.83rem; color: var(--body); line-height: 1.5; }
+        .tip-icon { color: var(--green-light); flex-shrink: 0; margin-top: 2px; font-size: 0.75rem; }
+
+        /* ─── LEGEND ─── */
+        .legend { display: flex; gap: 16px; margin-bottom: 14px; }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .legend-dot.safe { background: var(--green-mid); }
+        .legend-dot.unsafe { background: var(--terra); }
+
+        /* ─── FOOD CATEGORY ─── */
+        .food-cat { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 12px; }
+        .cat-header {
+            background: var(--green-bg2); padding: 10px 14px;
+            font-size: 0.85rem; font-weight: 700; color: var(--charcoal);
+            display: flex; align-items: center; gap: 8px;
         }
-        
-        .info-box.amber {
-            background: #fffbeb;
-            border-left-color: #fbbf24;
+        .cat-icon { font-size: 1rem; }
+        .food-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            transition: background 0.15s;
         }
-        
-        .info-box.amber p {
-            font-size: 0.875rem;
-            color: #b45309;
-        }
-        
-        /* Food List */
-        .food-category {
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-        
-        .category-header {
-            background: #f3f4f6;
-            padding: 0.75rem 1rem;
-            font-weight: 600;
-            color: #1f2937;
-        }
-        
-        .food-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #f3f4f6;
-            transition: background 0.2s ease;
-        }
-        
-        .food-item:last-child {
-            border-bottom: none;
-        }
-        
-        .food-item:hover {
-            background: #f9fafb;
-        }
-        
-        .food-badge {
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 50%;
-            border: 2px solid;
-            flex-shrink: 0;
-        }
-        
-        .food-badge.safe {
-            background: #dcfce7;
-            border-color: #4ade80;
-        }
-        
-        .food-badge.unsafe {
-            background: #fee2e2;
-            border-color: #f87171;
-        }
-        
-        .food-name {
-            font-size: 0.875rem;
-        }
-        
-        .food-item.unsafe .food-name {
-            color: #9ca3af;
-        }
-        
-        /* Legend */
-        .legend {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        /* Recipes */
+        .food-row:hover { background: var(--green-bg2); }
+        .food-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .food-dot.safe { background: var(--green-mid); }
+        .food-dot.unsafe { background: var(--terra); }
+        .food-name { font-size: 0.84rem; }
+        .food-row.unsafe .food-name { color: var(--muted); }
+        .food-row.safe .food-name { color: var(--charcoal); }
+
+        /* ─── RECIPE CARD ─── */
         .recipe-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: background 0.2s ease;
+            border: 1px solid var(--border); border-radius: var(--radius-md);
+            padding: 14px; margin-bottom: 12px;
+            transition: background 0.15s, box-shadow 0.15s;
+            cursor: pointer;
         }
-        
-        .recipe-card:hover {
-            background: #f9fafb;
-        }
-        
-        .recipe-day {
-            font-size: 0.75rem;
-            color: #6b7280;
-            margin-bottom: 0.25rem;
-        }
-        
-        .recipe-meal {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-        }
-        
-        .recipe-ingredients,
-        .recipe-instructions {
-            font-size: 0.75rem;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
-        }
-        
-        .recipe-label {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        /* Tracker */
+        .recipe-card:hover { background: var(--green-bg2); box-shadow: var(--shadow-sm); }
+        .recipe-day { font-size: 0.7rem; color: var(--green-main); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+        .recipe-name { font-size: 0.95rem; font-weight: 700; color: var(--charcoal); margin-bottom: 8px; }
+        .recipe-section-label { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .recipe-text { font-size: 0.8rem; color: var(--body); line-height: 1.5; }
+        .recipe-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+
+        /* ─── TRACKER ─── */
         .tracker-form {
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background: #f9fafb;
+            background: var(--green-bg2); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;
         }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
-        
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 0.5rem;
-        }
-        
+        .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--charcoal); margin-bottom: 6px; }
         .form-input {
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-family: inherit;
+            width: 100%; padding: 10px 12px;
+            border: 1.5px solid var(--border-mid); border-radius: var(--radius-sm);
+            font-size: 0.9rem; font-family: inherit; background: var(--white); color: var(--charcoal);
+            transition: border-color 0.2s;
         }
-        
-        .form-input:focus {
-            outline: none;
-            ring: 2px;
-            border-color: #60a5fa;
-        }
-        
-        .symptom-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-        }
-        
+        .form-input:focus { outline: none; border-color: var(--green-main); }
+        .form-group { margin-bottom: 14px; }
+        .symptom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .symptom-btn {
-            padding: 0.5rem 0.75rem;
-            font-size: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            background: #f3f4f6;
-            color: #374151;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 500;
+            padding: 9px 10px; font-size: 0.78rem; font-weight: 600;
+            border: 1.5px solid var(--border-mid); border-radius: var(--radius-sm);
+            background: var(--white); color: var(--body); cursor: pointer;
+            transition: all 0.2s; text-align: center;
         }
-        
-        .symptom-btn.active {
-            background: #fee2e2;
-            border-color: #f87171;
-            color: #991b1b;
+        .symptom-btn:hover { border-color: var(--terra); color: var(--terra); }
+        .symptom-btn.active { background: var(--terra-light); border-color: var(--terra); color: var(--terra); font-weight: 700; }
+        .log-btn {
+            width: 100%; padding: 12px; margin-top: 4px;
+            background: var(--green-main); color: var(--white);
+            border: none; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: background 0.2s;
+            letter-spacing: 0.2px;
         }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 0.5rem;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        
-        .submit-btn:hover {
-            background: #2563eb;
-        }
-        
-        /* Tracker Entries */
-        .entries-title {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.75rem;
-        }
-        
+        .log-btn:hover { background: var(--green-dark); }
+        .log-btn:active { transform: scale(0.98); }
+
+        /* ─── ENTRIES ─── */
         .entry {
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
-            background: white;
-            transition: background 0.2s ease;
+            border: 1px solid var(--border); border-radius: var(--radius-md);
+            padding: 12px 14px; margin-bottom: 10px; background: var(--white);
+            transition: background 0.15s;
         }
-        
-        .entry:hover {
-            background: #f9fafb;
-        }
-        
-        .entry-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.5rem;
-        }
-        
-        .entry-time {
-            font-size: 0.75rem;
-            color: #6b7280;
-            margin-bottom: 0.25rem;
-        }
-        
-        .entry-food {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #1f2937;
-        }
-        
-        .entry-delete {
-            background: none;
-            border: none;
-            color: #9ca3af;
-            cursor: pointer;
-            font-size: 1.25rem;
-            padding: 0;
-            transition: color 0.2s ease;
-        }
-        
-        .entry-delete:hover {
-            color: #ef4444;
-        }
-        
-        .entry-symptoms {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        .symptom-tag {
-            display: inline-block;
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.7rem;
-            font-weight: 500;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 2rem 1rem;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-        
-        /* Tips */
-        .tips-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .tip {
-            display: flex;
-            gap: 0.75rem;
-            font-size: 0.875rem;
-            color: #374151;
-        }
-        
-        .tip-bullet {
-            color: #9ca3af;
-            flex-shrink: 0;
-        }
-        
-        /* Phases */
-        .phase {
-            border-left: 4px solid #d1d5db;
-            padding-left: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .phase-title {
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.25rem;
-        }
-        
-        .phase-text {
-            font-size: 0.875rem;
-            color: #4b5563;
-        }
-        
-        .pb-8 {
-            padding-bottom: 2rem;
-        }
-        
-        .space-y-4 > * + * {
-            margin-top: 1rem;
-        }
-        
-        .space-y-6 > * + * {
-            margin-top: 1.5rem;
-        }
+        .entry:hover { background: var(--green-bg2); }
+        .entry-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .entry-meta { font-size: 0.72rem; color: var(--muted); margin-bottom: 3px; }
+        .entry-food { font-size: 0.88rem; font-weight: 600; color: var(--charcoal); }
+        .entry-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.1rem; padding: 0 0 0 8px; line-height: 1; transition: color 0.2s; }
+        .entry-del:hover { color: var(--terra); }
+        .entry-symptoms { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .symptom-tag { background: var(--terra-light); color: var(--terra); padding: 3px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+        .empty-state { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 0.85rem; }
+        .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+
+        /* ─── SEPARATOR ─── */
+        .gap { margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-content">
-                <h1>Low FODMAP</h1>
-                <p>Diet companion & tracker</p>
-            </div>
-            
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab-button active" data-tab="learn">Learn</button>
-                <button class="tab-button" data-tab="foods">Foods</button>
-                <button class="tab-button" data-tab="recipes">Recipes</button>
-                <button class="tab-button" data-tab="tracker">Tracker</button>
+<div class="app">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-top">
+            <img class="logo-img" src="data:image/png;base64,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" alt="FODMAP Helper logo">
+            <div class="header-titles">
+                <h1>FODMAP Helper</h1>
+                <p>Diet companion &amp; tracker</p>
             </div>
         </div>
-        
-        <!-- Content -->
-        <div class="content">
-            <!-- Learn Tab -->
-            <div id="learn" class="tab-pane active">
-                <div class="info-box blue">
-                    <h3>What is FODMAP?</h3>
-                    <p>FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols. These are carbohydrates that are poorly absorbed in the small intestine and fermented by bacteria in the colon, causing gas, bloating, and digestive discomfort.</p>
-                </div>
-                
-                <div class="space-y-6">
-                    <div>
-                        <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Diet Phases</h3>
-                        <div>
-                            <div class="phase">
-                                <div class="phase-title">Phase 1: Elimination (2-6 weeks)</div>
-                                <div class="phase-text">Remove all high FODMAP foods to allow your digestive system to rest and symptoms to improve.</div>
-                            </div>
-                            <div class="phase">
-                                <div class="phase-title">Phase 2: Reintroduction (8-12 weeks)</div>
-                                <div class="phase-text">Gradually add back high FODMAP foods one at a time to identify which specific foods trigger your symptoms.</div>
-                            </div>
-                            <div class="phase">
-                                <div class="phase-title">Phase 3: Personalization</div>
-                                <div class="phase-text">Tailor your diet to include only the foods that don't trigger symptoms while maintaining nutritional balance.</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Helpful Tips</h3>
-                        <div class="tips-list">
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>The low FODMAP diet is typically a 3-phase elimination diet to identify your specific food triggers</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Portion sizes matter - even low FODMAP foods can trigger symptoms in large amounts</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Keep a food and symptom diary to identify your personal triggers</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Use garlic and onion-infused oils instead of fresh garlic/onions for flavor</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Allow 3 days between reintroducing foods to observe reactions</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Work with a dietitian experienced in low FODMAP diet for best results</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Most symptoms improve within 1-2 weeks of eliminating high FODMAP foods</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Plain cooked meats, fish, and eggs are naturally FODMAP-free</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>Focus on foods you CAN eat rather than restrictions</span>
-                            </div>
-                            <div class="tip">
-                                <span class="tip-bullet">•</span>
-                                <span>This diet is temporary - meant to identify triggers, not for lifelong restriction</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="info-box amber" style="margin-top: 1.5rem;">
-                    <p><strong>Important:</strong> Always consult with a healthcare provider or registered dietitian before starting this diet. They can ensure you're following it correctly and getting proper nutrition.</p>
-                </div>
-            </div>
-            
-            <!-- Foods Tab -->
-            <div id="foods" class="tab-pane">
-                <div class="legend">
-                    <div class="legend-item">
-                        <div class="food-badge safe"></div>
-                        <span>Safe</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="food-badge unsafe"></div>
-                        <span>High FODMAP</span>
-                    </div>
-                </div>
-                
-                <div id="food-categories"></div>
-            </div>
-            
-            <!-- Recipes Tab -->
-            <div id="recipes" class="tab-pane pb-8">
-                <div id="recipes-list"></div>
-            </div>
-            
-            <!-- Tracker Tab -->
-            <div id="tracker" class="tab-pane pb-8">
-                <div class="tracker-form">
-                    <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Log Meal & Symptoms</h3>
-                    
-                    <div class="form-group">
-                        <label class="form-label">What did you eat?</label>
-                        <input type="text" id="mealInput" class="form-input" placeholder="e.g., Grilled chicken with rice and carrots">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Any symptoms?</label>
-                        <div class="symptom-buttons" id="symptom-buttons"></div>
-                    </div>
-                    
-                    <button class="submit-btn" onclick="logEntry()">Log Entry</button>
-                </div>
-                
-                <div>
-                    <div class="entries-title">Recent Entries</div>
-                    <div id="entries-list"></div>
-                </div>
-            </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="learn">Learn</button>
+            <button class="tab-btn" data-tab="foods">Foods</button>
+            <button class="tab-btn" data-tab="recipes">Recipes</button>
+            <button class="tab-btn" data-tab="tracker">Tracker</button>
         </div>
     </div>
-    
-    <script>
-        // Food Database
-        const foodDatabase = {
-            vegetables: {
-                name: 'Vegetables',
-                items: [
-                    { name: 'Carrots', safe: true },
-                    { name: 'Cucumbers', safe: true },
-                    { name: 'Lettuce', safe: true },
-                    { name: 'Potatoes', safe: true },
-                    { name: 'Zucchini', safe: true },
-                    { name: 'Green beans', safe: true },
-                    { name: 'Bell peppers (red/yellow)', safe: true },
-                    { name: 'Eggplant', safe: true },
-                    { name: 'Spinach', safe: true },
-                    { name: 'Tomatoes', safe: true },
-                    { name: 'Garlic', safe: false },
-                    { name: 'Onions', safe: false },
-                    { name: 'Asparagus', safe: false },
-                    { name: 'Broccoli', safe: false },
-                    { name: 'Mushrooms', safe: false },
-                ]
-            },
-            fruits: {
-                name: 'Fruits',
-                items: [
-                    { name: 'Bananas (unripe)', safe: true },
-                    { name: 'Blueberries', safe: true },
-                    { name: 'Cantaloupe', safe: true },
-                    { name: 'Grapes', safe: true },
-                    { name: 'Kiwi', safe: true },
-                    { name: 'Orange', safe: true },
-                    { name: 'Pineapple', safe: true },
-                    { name: 'Strawberries', safe: true },
-                    { name: 'Apples', safe: false },
-                    { name: 'Avocados', safe: false },
-                    { name: 'Cherries', safe: false },
-                    { name: 'Peaches', safe: false },
-                    { name: 'Watermelon', safe: false },
-                ]
-            },
-            proteins: {
-                name: 'Proteins',
-                items: [
-                    { name: 'Chicken (plain)', safe: true },
-                    { name: 'Beef (plain)', safe: true },
-                    { name: 'Fish', safe: true },
-                    { name: 'Eggs', safe: true },
-                    { name: 'Tofu', safe: true },
-                    { name: 'Tempeh', safe: true },
-                    { name: 'Peanuts', safe: true },
-                    { name: 'Macadamia nuts', safe: true },
-                    { name: 'Pork (plain)', safe: true },
-                    { name: 'Beans/Lentils', safe: false },
-                    { name: 'Chickpeas', safe: false },
-                    { name: 'Processed meats', safe: false },
-                    { name: 'Cashews', safe: false },
-                ]
-            },
-            dairy: {
-                name: 'Dairy & Alternatives',
-                items: [
-                    { name: 'Almond milk', safe: true },
-                    { name: 'Oat milk (low lactose)', safe: true },
-                    { name: 'Rice milk', safe: true },
-                    { name: 'Lactose-free milk', safe: true },
-                    { name: 'Brie cheese', safe: true },
-                    { name: 'Feta cheese', safe: true },
-                    { name: 'Parmesan', safe: true },
-                    { name: 'Cheddar (hard cheese)', safe: true },
-                    { name: 'Butter', safe: true },
-                    { name: 'Cow\'s milk', safe: false },
-                    { name: 'Yogurt', safe: false },
-                    { name: 'Ice cream', safe: false },
-                    { name: 'Cream cheese', safe: false },
-                ]
-            },
-            grains: {
-                name: 'Grains & Bread',
-                items: [
-                    { name: 'Rice', safe: true },
-                    { name: 'Gluten-free bread', safe: true },
-                    { name: 'Oats (plain)', safe: true },
-                    { name: 'Pasta (white)', safe: true },
-                    { name: 'Corn', safe: true },
-                    { name: 'Quinoa', safe: true },
-                    { name: 'Tapioca', safe: true },
-                    { name: 'Wheat bread', safe: false },
-                    { name: 'Barley', safe: false },
-                    { name: 'Rye', safe: false },
-                    { name: 'Cereal (most)', safe: false },
-                ]
-            },
-            condiments: {
-                name: 'Condiments & Oils',
-                items: [
-                    { name: 'Olive oil', safe: true },
-                    { name: 'Garlic-infused oil', safe: true },
-                    { name: 'Soy sauce', safe: true },
-                    { name: 'Mayonnaise', safe: true },
-                    { name: 'Barbeque sauce', safe: true },
-                    { name: 'Salt & pepper', safe: true },
-                    { name: 'Herbs & spices', safe: true },
-                    { name: 'Honey', safe: false },
-                    { name: 'High fructose corn syrup', safe: false },
-                    { name: 'Garlic/onion sauce', safe: false },
-                ]
-            }
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- ── LEARN ── -->
+        <div id="learn" class="tab-pane active">
+            <div class="info-card green">
+                <h3>What is FODMAP?</h3>
+                <p>FODMAP stands for <strong>Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols</strong> — carbohydrates poorly absorbed in the small intestine. They ferment in the colon, causing gas, bloating, and digestive discomfort in sensitive people.</p>
+            </div>
+
+            <div class="section-title">The 3-Phase Protocol</div>
+            <div class="phase-list">
+                <div class="phase-item">
+                    <div class="phase-dot">1</div>
+                    <div class="phase-body">
+                        <strong>Elimination — 2 to 6 weeks</strong>
+                        <p>Remove all high FODMAP foods. Most people see significant symptom relief within 2 weeks.</p>
+                    </div>
+                </div>
+                <div class="phase-item">
+                    <div class="phase-dot">2</div>
+                    <div class="phase-body">
+                        <strong>Reintroduction — 8 to 12 weeks</strong>
+                        <p>Reintroduce one FODMAP group at a time (3-day intervals) to identify your personal triggers.</p>
+                    </div>
+                </div>
+                <div class="phase-item">
+                    <div class="phase-dot">3</div>
+                    <div class="phase-body">
+                        <strong>Personalization — Ongoing</strong>
+                        <p>Build a long-term diet that avoids only your specific triggers, maximizing variety and nutrition.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">Helpful Tips</div>
+            <div class="tips-list">
+                <div class="tip-item"><span class="tip-icon">●</span><span>Portion sizes matter — even safe foods can trigger symptoms in large amounts</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Use garlic- and onion-infused oils for flavour (the FODMAPs don't transfer into oil)</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Keep this tracker to spot patterns between foods and symptoms</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Allow 3 days between reintroduced foods to observe reactions clearly</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Plain cooked meats, fish, and eggs are naturally FODMAP-free</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Hard aged cheeses (parmesan, cheddar) are low in lactose and safe</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Ripe bananas are high FODMAP; unripe (green-tipped) ones are safe</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Most symptoms improve within 1–2 weeks of the elimination phase</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>Focus on the long list of foods you CAN eat, not on restrictions</span></div>
+                <div class="tip-item"><span class="tip-icon">●</span><span>This diet is temporary — the goal is to find your threshold, not restrict forever</span></div>
+            </div>
+
+            <div class="info-card amber">
+                <p><strong>⚕️ Important:</strong> Always consult a registered dietitian experienced in the low FODMAP diet before starting. They ensure you follow it correctly and maintain proper nutrition throughout.</p>
+            </div>
+        </div>
+
+        <!-- ── FOODS ── -->
+        <div id="foods" class="tab-pane">
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot safe"></div> Safe to eat</div>
+                <div class="legend-item"><div class="legend-dot unsafe"></div> High FODMAP — avoid</div>
+            </div>
+            <div id="food-categories"></div>
+        </div>
+
+        <!-- ── RECIPES ── -->
+        <div id="recipes" class="tab-pane">
+            <div id="recipes-list"></div>
+        </div>
+
+        <!-- ── TRACKER ── -->
+        <div id="tracker" class="tab-pane">
+            <div class="tracker-form">
+                <div class="form-group">
+                    <label class="form-label" for="mealInput">What did you eat?</label>
+                    <input type="text" id="mealInput" class="form-input" placeholder="e.g. Grilled chicken, rice and carrots">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Any symptoms? (optional)</label>
+                    <div class="symptom-grid" id="symptom-buttons"></div>
+                </div>
+                <button class="log-btn" onclick="logEntry()">Log Entry</button>
+            </div>
+            <div class="section-title">Recent Entries</div>
+            <div id="entries-list"></div>
+        </div>
+
+    </div><!-- /content -->
+</div><!-- /app -->
+
+<script>
+const foodDB = [
+    { cat: '🥦 Vegetables', items: [
+        { name: 'Carrots', safe: true }, { name: 'Cucumbers', safe: true },
+        { name: 'Lettuce', safe: true }, { name: 'Potatoes', safe: true },
+        { name: 'Zucchini / Courgette', safe: true }, { name: 'Green beans', safe: true },
+        { name: 'Bell peppers (red/yellow)', safe: true }, { name: 'Eggplant / Aubergine', safe: true },
+        { name: 'Spinach', safe: true }, { name: 'Tomatoes', safe: true },
+        { name: 'Bok choy', safe: true }, { name: 'Kale', safe: true },
+        { name: 'Sweet potato (½ cup limit)', safe: true },
+        { name: 'Garlic', safe: false }, { name: 'Onions', safe: false },
+        { name: 'Asparagus', safe: false }, { name: 'Broccoli (large amounts)', safe: false },
+        { name: 'Cauliflower', safe: false }, { name: 'Mushrooms', safe: false },
+        { name: 'Leeks', safe: false }, { name: 'Peas', safe: false },
+    ]},
+    { cat: '🍓 Fruits', items: [
+        { name: 'Bananas (unripe/green-tipped)', safe: true }, { name: 'Blueberries', safe: true },
+        { name: 'Cantaloupe / Rockmelon', safe: true }, { name: 'Grapes', safe: true },
+        { name: 'Kiwi', safe: true }, { name: 'Orange', safe: true },
+        { name: 'Pineapple', safe: true }, { name: 'Strawberries', safe: true },
+        { name: 'Lemon / Lime', safe: true }, { name: 'Mandarin', safe: true },
+        { name: 'Apples', safe: false }, { name: 'Avocados (large amounts)', safe: false },
+        { name: 'Cherries', safe: false }, { name: 'Peaches', safe: false },
+        { name: 'Watermelon', safe: false }, { name: 'Pears', safe: false },
+        { name: 'Mangoes', safe: false }, { name: 'Ripe bananas', safe: false },
+    ]},
+    { cat: '🍗 Proteins', items: [
+        { name: 'Chicken (plain)', safe: true }, { name: 'Beef (plain)', safe: true },
+        { name: 'Fish & seafood', safe: true }, { name: 'Eggs', safe: true },
+        { name: 'Firm tofu', safe: true }, { name: 'Tempeh', safe: true },
+        { name: 'Pork (plain)', safe: true }, { name: 'Turkey (plain)', safe: true },
+        { name: 'Peanuts (small amounts)', safe: true }, { name: 'Macadamia nuts', safe: true },
+        { name: 'Walnuts (small amounts)', safe: true },
+        { name: 'Beans / Lentils', safe: false }, { name: 'Chickpeas', safe: false },
+        { name: 'Marinated / processed meats', safe: false },
+        { name: 'Cashews', safe: false }, { name: 'Pistachios', safe: false },
+    ]},
+    { cat: '🥛 Dairy & Alternatives', items: [
+        { name: 'Almond milk (unsweetened)', safe: true }, { name: 'Rice milk', safe: true },
+        { name: 'Lactose-free milk', safe: true }, { name: 'Brie cheese', safe: true },
+        { name: 'Feta cheese', safe: true }, { name: 'Parmesan', safe: true },
+        { name: 'Cheddar (hard cheese)', safe: true }, { name: 'Mozzarella', safe: true },
+        { name: 'Butter / Margarine', safe: true }, { name: 'Lactose-free yogurt', safe: true },
+        { name: 'Regular cow\'s milk', safe: false }, { name: 'Regular yogurt', safe: false },
+        { name: 'Ice cream', safe: false }, { name: 'Cream cheese', safe: false },
+        { name: 'Ricotta (large amounts)', safe: false },
+    ]},
+    { cat: '🍞 Grains & Bread', items: [
+        { name: 'White or brown rice', safe: true }, { name: 'Gluten-free bread', safe: true },
+        { name: 'Oats — plain, rolled', safe: true }, { name: 'White pasta', safe: true },
+        { name: 'Corn / Polenta', safe: true }, { name: 'Quinoa', safe: true },
+        { name: 'Rice cakes / crackers', safe: true }, { name: 'Tapioca', safe: true },
+        { name: 'Sourdough spelt bread (2 slices)', safe: true },
+        { name: 'Wheat bread', safe: false }, { name: 'Rye bread', safe: false },
+        { name: 'Barley', safe: false }, { name: 'Most breakfast cereals', safe: false },
+        { name: 'Couscous', safe: false },
+    ]},
+    { cat: '🫙 Condiments & Oils', items: [
+        { name: 'Olive oil', safe: true }, { name: 'Garlic-infused oil', safe: true },
+        { name: 'Soy sauce / Tamari', safe: true }, { name: 'Mayonnaise (plain)', safe: true },
+        { name: 'Mustard', safe: true }, { name: 'Salt & pepper', safe: true },
+        { name: 'Fresh herbs', safe: true }, { name: 'Maple syrup (small amounts)', safe: true },
+        { name: 'Vinegar (most types)', safe: true },
+        { name: 'Honey', safe: false }, { name: 'High fructose corn syrup', safe: false },
+        { name: 'Garlic / onion powder or paste', safe: false },
+        { name: 'Hummus (large amounts)', safe: false },
+    ]},
+];
+
+const recipes = [
+    { day: 'Monday', name: 'Grilled Chicken with Rice & Carrots', ingredients: 'Chicken breast, white rice, carrots, olive oil, salt & pepper, fresh thyme', instructions: 'Season chicken with salt, pepper and thyme. Grill 6–7 min per side. Steam rice and roasted carrots alongside. Drizzle with olive oil to serve.' },
+    { day: 'Tuesday', name: 'Pan-Seared Salmon with Potato & Spinach', ingredients: 'Salmon fillet, baby potatoes, spinach, butter, lemon juice, salt', instructions: 'Boil potatoes until tender. Sear salmon skin-down 4 min, flip 2 min. Wilt spinach in butter. Plate together with a squeeze of lemon.' },
+    { day: 'Wednesday', name: 'Gluten-Free Pasta Primavera', ingredients: 'GF penne, zucchini, bell pepper, cherry tomatoes, olive oil, parmesan', instructions: 'Cook pasta per packet. Sauté vegetables in olive oil 5 min. Toss with pasta, top with parmesan.' },
+    { day: 'Thursday', name: 'Scrambled Eggs, Spinach & Rice Cakes', ingredients: 'Eggs (×3), baby spinach, butter, cherry tomatoes, rice cakes, chives', instructions: 'Melt butter in pan, add spinach until wilted. Add beaten eggs, stir gently over low heat until just set. Serve with rice cakes and tomatoes.' },
+    { day: 'Friday', name: 'Turkey Meatballs with Sweet Potato Mash', ingredients: 'Ground turkey, GF breadcrumbs, egg, sweet potato (½ cup serve), carrot, olive oil', instructions: 'Mix turkey, breadcrumbs and egg. Form balls, bake 200°C / 400°F for 20 min. Boil and mash sweet potato with butter.' },
+    { day: 'Saturday', name: 'Pork Tenderloin with Green Beans & Potatoes', ingredients: 'Pork tenderloin, green beans, baby potatoes, olive oil, rosemary, mustard', instructions: 'Rub pork with mustard and rosemary. Roast at 200°C / 400°F for 25 min. Steam beans and boil potatoes until tender.' },
+    { day: 'Sunday', name: 'Tofu Rice Bowl with Fresh Vegetables', ingredients: 'Firm tofu, jasmine rice, cucumber, carrot (grated), bell pepper, soy sauce, sesame oil', instructions: 'Press and cube tofu, pan-fry until golden. Cook rice. Arrange in bowls with fresh veg. Drizzle with soy sauce and sesame oil.' },
+];
+
+const symptoms = ['Bloating', 'Gas', 'Abdominal pain', 'Cramping', 'Diarrhea', 'Constipation', 'Nausea', 'Fatigue'];
+
+let trackerEntries = [];
+let activeSymptoms = [];
+
+// ── Render food categories ──
+function renderFoods() {
+    const c = document.getElementById('food-categories');
+    c.innerHTML = '';
+    foodDB.forEach(cat => {
+        const el = document.createElement('div');
+        el.className = 'food-cat';
+        let rows = cat.items.map(item => `
+            <div class="food-row ${item.safe ? 'safe' : 'unsafe'}">
+                <div class="food-dot ${item.safe ? 'safe' : 'unsafe'}"></div>
+                <div class="food-name">${item.name}</div>
+            </div>
+        `).join('');
+        el.innerHTML = `<div class="cat-header"><span class="cat-icon">${cat.cat.split(' ')[0]}</span>${cat.cat.substring(cat.cat.indexOf(' ')+1)}</div>${rows}`;
+        c.appendChild(el);
+    });
+}
+
+// ── Render recipes ──
+function renderRecipes() {
+    const c = document.getElementById('recipes-list');
+    c.innerHTML = '';
+    recipes.forEach(r => {
+        const el = document.createElement('div');
+        el.className = 'recipe-card';
+        el.innerHTML = `
+            <div class="recipe-day">${r.day}</div>
+            <div class="recipe-name">${r.name}</div>
+            <div class="recipe-section-label">Ingredients</div>
+            <div class="recipe-text">${r.ingredients}</div>
+            <hr class="recipe-divider">
+            <div class="recipe-section-label">Instructions</div>
+            <div class="recipe-text">${r.instructions}</div>
+        `;
+        c.appendChild(el);
+    });
+}
+
+// ── Render symptom buttons ──
+function renderSymptomButtons() {
+    const c = document.getElementById('symptom-buttons');
+    c.innerHTML = '';
+    symptoms.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = 'symptom-btn';
+        btn.textContent = s;
+        btn.onclick = () => {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) activeSymptoms.push(s);
+            else activeSymptoms = activeSymptoms.filter(x => x !== s);
         };
-        
-        const weeklyRecipes = [
-            {
-                day: 'Monday',
-                meal: 'Grilled Chicken with Rice & Carrots',
-                ingredients: ['Chicken breast', 'White rice', 'Carrots', 'Olive oil', 'Salt & pepper'],
-                instructions: 'Grill seasoned chicken, serve with steamed rice and roasted carrots.'
-            },
-            {
-                day: 'Tuesday',
-                meal: 'Fish Tacos with Lettuce Wraps',
-                ingredients: ['White fish', 'Lettuce leaves', 'Bell pepper', 'Lime juice', 'Salt'],
-                instructions: 'Pan-sear fish, wrap in lettuce with sliced peppers and lime.'
-            },
-            {
-                day: 'Wednesday',
-                meal: 'Gluten-Free Pasta Primavera',
-                ingredients: ['GF pasta', 'Zucchini', 'Carrots', 'Tomatoes', 'Olive oil'],
-                instructions: 'Cook pasta, toss with roasted vegetables and olive oil.'
-            },
-            {
-                day: 'Thursday',
-                meal: 'Scrambled Eggs & Rice Cakes',
-                ingredients: ['Eggs', 'Rice cakes', 'Tomatoes', 'Spinach', 'Butter'],
-                instructions: 'Scramble eggs with spinach, serve with rice cakes and tomatoes.'
-            },
-            {
-                day: 'Friday',
-                meal: 'Turkey Meatballs with Sweet Potato',
-                ingredients: ['Ground turkey', 'Rice breadcrumbs', 'Egg', 'Sweet potato', 'Carrot'],
-                instructions: 'Bake seasoned meatballs, serve with roasted sweet potato and carrot.'
-            },
-            {
-                day: 'Saturday',
-                meal: 'Grilled Pork with Green Beans',
-                ingredients: ['Pork tenderloin', 'Green beans', 'Potatoes', 'Olive oil', 'Herbs'],
-                instructions: 'Grill pork, serve with steamed green beans and roasted potatoes.'
-            },
-            {
-                day: 'Sunday',
-                meal: 'Rice Bowl with Tofu & Vegetables',
-                ingredients: ['Tofu', 'Rice', 'Cucumber', 'Carrot', 'Bell pepper', 'Soy sauce'],
-                instructions: 'Pan-fry tofu cubes, serve over rice with fresh vegetables and soy sauce.'
-            }
-        ];
-        
-        const symptoms = ['Bloating', 'Gas', 'Abdominal pain', 'Cramping', 'Diarrhea', 'Constipation', 'Nausea', 'Fatigue'];
-        
-        let trackerEntries = [];
-        let selectedSymptoms = [];
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            renderFoods();
-            renderRecipes();
-            renderSymptomButtons();
-            setupTabs();
-        });
-        
-        function renderFoods() {
-            const container = document.getElementById('food-categories');
-            container.innerHTML = '';
-            
-            Object.values(foodDatabase).forEach(category => {
-                const categoryEl = document.createElement('div');
-                categoryEl.className = 'food-category';
-                
-                let html = `<div class="category-header">${category.name}</div>`;
-                
-                category.items.forEach(item => {
-                    const safeClass = item.safe ? 'safe' : 'unsafe';
-                    html += `
-                        <div class="food-item ${safeClass}">
-                            <div class="food-badge ${safeClass}"></div>
-                            <div class="food-name">${item.name}</div>
-                        </div>
-                    `;
-                });
-                
-                categoryEl.innerHTML = html;
-                container.appendChild(categoryEl);
-            });
-        }
-        
-        function renderRecipes() {
-            const container = document.getElementById('recipes-list');
-            container.innerHTML = '';
-            
-            weeklyRecipes.forEach(recipe => {
-                const recipeEl = document.createElement('div');
-                recipeEl.className = 'recipe-card';
-                recipeEl.innerHTML = `
-                    <div class="recipe-day">${recipe.day}</div>
-                    <div class="recipe-meal">${recipe.meal}</div>
-                    <div class="recipe-ingredients">
-                        <div class="recipe-label">Ingredients:</div>
-                        <div>${recipe.ingredients.join(', ')}</div>
-                    </div>
-                    <div class="recipe-instructions">
-                        <div class="recipe-label">Instructions:</div>
-                        <div>${recipe.instructions}</div>
-                    </div>
-                `;
-                container.appendChild(recipeEl);
-            });
-        }
-        
-        function renderSymptomButtons() {
-            const container = document.getElementById('symptom-buttons');
-            container.innerHTML = '';
-            
-            symptoms.forEach(symptom => {
-                const btn = document.createElement('button');
-                btn.className = 'symptom-btn';
-                btn.textContent = symptom;
-                btn.onclick = (e) => {
-                    e.preventDefault();
-                    btn.classList.toggle('active');
-                    if (btn.classList.contains('active')) {
-                        selectedSymptoms.push(symptom);
-                    } else {
-                        selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
-                    }
-                };
-                container.appendChild(btn);
-            });
-        }
-        
-        function logEntry() {
-            const mealInput = document.getElementById('mealInput');
-            const food = mealInput.value.trim();
-            
-            if (!food) return;
-            
-            const entry = {
-                id: Date.now(),
-                date: new Date().toLocaleDateString(),
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                food: food,
-                symptoms: [...selectedSymptoms]
-            };
-            
-            trackerEntries.unshift(entry);
-            mealInput.value = '';
-            selectedSymptoms = [];
-            
-            // Reset buttons
-            document.querySelectorAll('.symptom-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            renderEntries();
-        }
-        
-        function renderEntries() {
-            const container = document.getElementById('entries-list');
-            
-            if (trackerEntries.length === 0) {
-                container.innerHTML = '<div class="empty-state">No entries yet. Start logging your meals!</div>';
-                return;
-            }
-            
-            container.innerHTML = '';
-            trackerEntries.forEach(entry => {
-                const entryEl = document.createElement('div');
-                entryEl.className = 'entry';
-                
-                let symptomsHtml = '';
-                if (entry.symptoms.length > 0) {
-                    symptomsHtml = '<div class="entry-symptoms">' + 
-                        entry.symptoms.map(s => `<span class="symptom-tag">${s}</span>`).join('') + 
-                        '</div>';
-                }
-                
-                entryEl.innerHTML = `
-                    <div class="entry-header">
-                        <div style="flex: 1;">
-                            <div class="entry-time">${entry.date} at ${entry.time}</div>
-                            <div class="entry-food">${entry.food}</div>
-                        </div>
-                        <button class="entry-delete" onclick="deleteEntry(${entry.id})">✕</button>
-                    </div>
-                    ${symptomsHtml}
-                `;
-                container.appendChild(entryEl);
-            });
-        }
-        
-        function deleteEntry(id) {
-            trackerEntries = trackerEntries.filter(e => e.id !== id);
-            renderEntries();
-        }
-        
-        function setupTabs() {
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabName = button.dataset.tab;
-                    
-                    // Update buttons
-                    document.querySelectorAll('.tab-button').forEach(b => {
-                        b.classList.remove('active');
-                    });
-                    button.classList.add('active');
-                    
-                    // Update content
-                    document.querySelectorAll('.tab-pane').forEach(pane => {
-                        pane.classList.remove('active');
-                    });
-                    document.getElementById(tabName).classList.add('active');
-                });
-            });
-        }
-        
-        // Allow Enter key in meal input
-        document.addEventListener('DOMContentLoaded', function() {
-            const mealInput = document.getElementById('mealInput');
-            if (mealInput) {
-                mealInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        logEntry();
-                    }
-                });
-            }
-        });
-    </script>
+        c.appendChild(btn);
+    });
+}
+
+// ── Log entry ──
+function logEntry() {
+    const input = document.getElementById('mealInput');
+    const food = input.value.trim();
+    if (!food) { input.focus(); return; }
+    trackerEntries.unshift({
+        id: Date.now(),
+        date: new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short' }),
+        time: new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }),
+        food,
+        symptoms: [...activeSymptoms],
+    });
+    input.value = '';
+    activeSymptoms = [];
+    document.querySelectorAll('.symptom-btn').forEach(b => b.classList.remove('active'));
+    renderEntries();
+}
+
+// ── Render entries ──
+function renderEntries() {
+    const c = document.getElementById('entries-list');
+    if (!trackerEntries.length) {
+        c.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div>No entries yet.<br>Start logging your meals!</div>';
+        return;
+    }
+    c.innerHTML = '';
+    trackerEntries.forEach(e => {
+        const el = document.createElement('div');
+        el.className = 'entry';
+        const tags = e.symptoms.map(s => `<span class="symptom-tag">${s}</span>`).join('');
+        el.innerHTML = `
+            <div class="entry-header">
+                <div>
+                    <div class="entry-meta">${e.date} at ${e.time}</div>
+                    <div class="entry-food">${e.food}</div>
+                </div>
+                <button class="entry-del" onclick="deleteEntry(${e.id})">✕</button>
+            </div>
+            ${e.symptoms.length ? `<div class="entry-symptoms">${tags}</div>` : ''}
+        `;
+        c.appendChild(el);
+    });
+}
+
+// ── Delete entry ──
+function deleteEntry(id) {
+    trackerEntries = trackerEntries.filter(e => e.id !== id);
+    renderEntries();
+}
+
+// ── Tabs ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+// ── Enter key on meal input ──
+document.getElementById('mealInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') logEntry();
+});
+
+// ── Init ──
+renderFoods();
+renderRecipes();
+renderSymptomButtons();
+renderEntries();
+</script>
 </body>
 </html>
