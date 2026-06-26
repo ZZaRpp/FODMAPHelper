@@ -62,6 +62,7 @@ body {
   background: linear-gradient(135deg, var(--cream) 0%, #FFFFFF 100%);
   overflow: hidden;
   padding-top: 80px;
+  background-image: url(Images/hero1.png);
 }
 
 .navbar {
@@ -271,8 +272,8 @@ body {
   font-weight: 300;
 }
 
-.about { background: white; }
-.foods { background: white; }
+.about { background: white; background-image: url(Images/hero2.png);}
+.foods { background: white; background-image: url(Images/hero3.png);}
 .avoid { background: linear-gradient(135deg, var(--cream) 0%, white 100%); }
 .recipes { background: white; }
 .tips { background: linear-gradient(135deg, var(--cream) 0%, white 100%); }
