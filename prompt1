@@ -1,0 +1,65 @@
+FODMAP Helper Website Specification
+
+ROLE You are an award-winning UI/UX designer and senior front-end
+developer.
+
+Design and build a single-page responsive website called FODMAP Helper.
+
+Inspiration: - Bloom
+(https://bloom-fluid-demo.squarespace.com/?nochrome=true) - Apple -
+Headspace - Oura - Calm
+
+Do not copy Bloom exactly; use it as inspiration for spacing,
+typography, editorial layout, and premium wellness aesthetic.
+
+TECHNICAL REQUIREMENTS - HTML5 - CSS3 - Vanilla JavaScript - No
+frameworks (Bootstrap, Tailwind, React, jQuery, etc.)
+
+Deliver: - index.html - style.css - script.js
+
+Responsive: - Desktop - Tablet - Mobile
+
+Typography: - Google Font: Raleway - Large elegant headings -
+Comfortable whitespace
+
+Palette: Background: #FAF8F4 Primary: #4A7C59 Secondary: #7AAB8A Accent:
+#C8624A Text: #2D3B35
+
+SECTIONS 1. Fullscreen Hero with transparent navigation, logo, CTA,
+parallax background. 2. About Low FODMAP explaining IBS and the three
+phases: - Elimination - Reintroduction - Personalisation 3. Foods You
+Can Eat: Vegetables, Fruit, Proteins, Grains, Dairy Alternatives, Nuts &
+Seeds, Herbs, Oils. Include 20–30 foods per category. 4. Foods To Avoid
+grouped by: - Fructans - GOS - Lactose - Excess Fructose - Polyols 5.
+Food comparison cards (safe vs avoid). 6. Seven-day meal inspiration. 7.
+Recipe section with at least 24 recipes including ingredients,
+instructions, prep time, nutrition, Low FODMAP notes, and difficulty. 8.
+Around 30 practical Low FODMAP tips. 9. FAQ accordion with about 20
+questions. 10. Footer with disclaimer, social icons, and helpful links.
+
+DESIGN - Premium wellness aesthetic - Large food photography - Rounded
+cards - Organic shapes - Glassmorphism navigation - Soft gradients -
+Smooth shadows
+
+ANIMATIONS - CSS parallax - Fade-in - Slide-up - Hover animations -
+Smooth scrolling - Floating elements - Intersection Observer reveals -
+Navigation shrink on scroll
+
+IMAGES Use royalty-free placeholder images from Unsplash or Pexels
+featuring healthy meals, vegetables, fruit, nature, kitchens, and
+wellness.
+
+ACCESSIBILITY - Semantic HTML - ARIA labels - Keyboard navigation - WCAG
+AA contrast
+
+PERFORMANCE - Lazy-load images - Optimised CSS and JavaScript
+
+SEO - Meta description - Open Graph tags - Proper heading hierarchy -
+Alt text
+
+CODE QUALITY - Well commented - CSS variables - CSS Grid + Flexbox -
+Reusable components - Avoid duplicated code
+
+GOAL The finished website should look like a professionally designed
+commercial wellness website that exceeds the quality of the Bloom
+inspiration while remaining clean, elegant, and editorial.
