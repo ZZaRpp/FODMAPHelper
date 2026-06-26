@@ -105,7 +105,7 @@ body {
   height: 80px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: url(Images/fodmap_logo.png);
+  background: url(Images/fodmap_logo_simple.png);
   background-size: contain;
   background-repeat: no-repeat;
 }
