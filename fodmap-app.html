@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low FODMAP Diet Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #1f2937;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+        }
+        
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header-content {
+            padding: 1rem;
+        }
+        
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+        
+        .header p {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            color: #374151;
+        }
+        
+        .tab-button.active {
+            color: #1f2937;
+            border-bottom-color: #1f2937;
+        }
+        
+        /* Content */
+        .content {
+            padding: 1.5rem;
+            min-height: 60vh;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+        }
+        
+        .info-box.blue {
+            background: #eff6ff;
+            border-left-color: #60a5fa;
+        }
+        
+        .info-box.blue h3 {
+            color: #1e3a8a;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-box.blue p {
+            font-size: 0.875rem;
+            color: #1e40af;
+        }
+        
+        .info-box.amber {
+            background: #fffbeb;
+            border-left-color: #fbbf24;
+        }
+        
+        .info-box.amber p {
+            font-size: 0.875rem;
+            color: #b45309;
+        }
+        
+        /* Food List */
+        .food-category {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .category-header {
+            background: #f3f4f6;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .food-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s ease;
+        }
+        
+        .food-item:last-child {
+            border-bottom: none;
+        }
+        
+        .food-item:hover {
+            background: #f9fafb;
+        }
+        
+        .food-badge {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            border: 2px solid;
+            flex-shrink: 0;
+        }
+        
+        .food-badge.safe {
+            background: #dcfce7;
+            border-color: #4ade80;
+        }
+        
+        .food-badge.unsafe {
+            background: #fee2e2;
+            border-color: #f87171;
+        }
+        
+        .food-name {
+            font-size: 0.875rem;
+        }
+        
+        .food-item.unsafe .food-name {
+            color: #9ca3af;
+        }
+        
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Recipes */
+        .recipe-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: background 0.2s ease;
+        }
+        
+        .recipe-card:hover {
+            background: #f9fafb;
+        }
+        
+        .recipe-day {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+        
+        .recipe-meal {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .recipe-ingredients,
+        .recipe-instructions {
+            font-size: 0.75rem;
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+        }
+        
+        .recipe-label {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        /* Tracker */
+        .tracker-form {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f9fafb;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            ring: 2px;
+            border-color: #60a5fa;
+        }
+        
+        .symptom-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        
+        .symptom-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            background: #f3f4f6;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .symptom-btn.active {
+            background: #fee2e2;
+            border-color: #f87171;
+            color: #991b1b;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* Tracker Entries */
+        .entries-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+        
+        .entry {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            background: white;
+            transition: background 0.2s ease;
+        }
+        
+        .entry:hover {
+            background: #f9fafb;
+        }
+        
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .entry-time {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+        
+        .entry-food {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .entry-delete {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+        
+        .entry-delete:hover {
+            color: #ef4444;
+        }
+        
+        .entry-symptoms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .symptom-tag {
+            display: inline-block;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        /* Tips */
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .tip {
+            display: flex;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        .tip-bullet {
+            color: #9ca3af;
+            flex-shrink: 0;
+        }
+        
+        /* Phases */
+        .phase {
+            border-left: 4px solid #d1d5db;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .phase-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+        
+        .phase-text {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        
+        .pb-8 {
+            padding-bottom: 2rem;
+        }
+        
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+        
+        .space-y-6 > * + * {
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Low FODMAP</h1>
+                <p>Diet companion & tracker</p>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-button active" data-tab="learn">Learn</button>
+                <button class="tab-button" data-tab="foods">Foods</button>
+                <button class="tab-button" data-tab="recipes">Recipes</button>
+                <button class="tab-button" data-tab="tracker">Tracker</button>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Learn Tab -->
+            <div id="learn" class="tab-pane active">
+                <div class="info-box blue">
+                    <h3>What is FODMAP?</h3>
+                    <p>FODMAP stands for Fermentable Oligosaccharides, Disaccharides, Monosaccharides, and Polyols. These are carbohydrates that are poorly absorbed in the small intestine and fermented by bacteria in the colon, causing gas, bloating, and digestive discomfort.</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Diet Phases</h3>
+                        <div>
+                            <div class="phase">
+                                <div class="phase-title">Phase 1: Elimination (2-6 weeks)</div>
+                                <div class="phase-text">Remove all high FODMAP foods to allow your digestive system to rest and symptoms to improve.</div>
+                            </div>
+                            <div class="phase">
+                                <div class="phase-title">Phase 2: Reintroduction (8-12 weeks)</div>
+                                <div class="phase-text">Gradually add back high FODMAP foods one at a time to identify which specific foods trigger your symptoms.</div>
+                            </div>
+                            <div class="phase">
+                                <div class="phase-title">Phase 3: Personalization</div>
+                                <div class="phase-text">Tailor your diet to include only the foods that don't trigger symptoms while maintaining nutritional balance.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem;">Helpful Tips</h3>
+                        <div class="tips-list">
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>The low FODMAP diet is typically a 3-phase elimination diet to identify your specific food triggers</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Portion sizes matter - even low FODMAP foods can trigger symptoms in large amounts</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Keep a food and symptom diary to identify your personal triggers</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Use garlic and onion-infused oils instead of fresh garlic/onions for flavor</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Allow 3 days between reintroducing foods to observe reactions</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Work with a dietitian experienced in low FODMAP diet for best results</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Most symptoms improve within 1-2 weeks of eliminating high FODMAP foods</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Plain cooked meats, fish, and eggs are naturally FODMAP-free</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>Focus on foods you CAN eat rather than restrictions</span>
+                            </div>
+                            <div class="tip">
+                                <span class="tip-bullet">•</span>
+                                <span>This diet is temporary - meant to identify triggers, not for lifelong restriction</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-box amber" style="margin-top: 1.5rem;">
+                    <p><strong>Important:</strong> Always consult with a healthcare provider or registered dietitian before starting this diet. They can ensure you're following it correctly and getting proper nutrition.</p>
+                </div>
+            </div>
+            
+            <!-- Foods Tab -->
+            <div id="foods" class="tab-pane">
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="food-badge safe"></div>
+                        <span>Safe</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="food-badge unsafe"></div>
+                        <span>High FODMAP</span>
+                    </div>
+                </div>
+                
+                <div id="food-categories"></div>
+            </div>
+            
+            <!-- Recipes Tab -->
+            <div id="recipes" class="tab-pane pb-8">
+                <div id="recipes-list"></div>
+            </div>
+            
+            <!-- Tracker Tab -->
+            <div id="tracker" class="tab-pane pb-8">
+                <div class="tracker-form">
+                    <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Log Meal & Symptoms</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">What did you eat?</label>
+                        <input type="text" id="mealInput" class="form-input" placeholder="e.g., Grilled chicken with rice and carrots">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Any symptoms?</label>
+                        <div class="symptom-buttons" id="symptom-buttons"></div>
+                    </div>
+                    
+                    <button class="submit-btn" onclick="logEntry()">Log Entry</button>
+                </div>
+                
+                <div>
+                    <div class="entries-title">Recent Entries</div>
+                    <div id="entries-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Food Database
+        const foodDatabase = {
+            vegetables: {
+                name: 'Vegetables',
+                items: [
+                    { name: 'Carrots', safe: true },
+                    { name: 'Cucumbers', safe: true },
+                    { name: 'Lettuce', safe: true },
+                    { name: 'Potatoes', safe: true },
+                    { name: 'Zucchini', safe: true },
+                    { name: 'Green beans', safe: true },
+                    { name: 'Bell peppers (red/yellow)', safe: true },
+                    { name: 'Eggplant', safe: true },
+                    { name: 'Spinach', safe: true },
+                    { name: 'Tomatoes', safe: true },
+                    { name: 'Garlic', safe: false },
+                    { name: 'Onions', safe: false },
+                    { name: 'Asparagus', safe: false },
+                    { name: 'Broccoli', safe: false },
+                    { name: 'Mushrooms', safe: false },
+                ]
+            },
+            fruits: {
+                name: 'Fruits',
+                items: [
+                    { name: 'Bananas (unripe)', safe: true },
+                    { name: 'Blueberries', safe: true },
+                    { name: 'Cantaloupe', safe: true },
+                    { name: 'Grapes', safe: true },
+                    { name: 'Kiwi', safe: true },
+                    { name: 'Orange', safe: true },
+                    { name: 'Pineapple', safe: true },
+                    { name: 'Strawberries', safe: true },
+                    { name: 'Apples', safe: false },
+                    { name: 'Avocados', safe: false },
+                    { name: 'Cherries', safe: false },
+                    { name: 'Peaches', safe: false },
+                    { name: 'Watermelon', safe: false },
+                ]
+            },
+            proteins: {
+                name: 'Proteins',
+                items: [
+                    { name: 'Chicken (plain)', safe: true },
+                    { name: 'Beef (plain)', safe: true },
+                    { name: 'Fish', safe: true },
+                    { name: 'Eggs', safe: true },
+                    { name: 'Tofu', safe: true },
+                    { name: 'Tempeh', safe: true },
+                    { name: 'Peanuts', safe: true },
+                    { name: 'Macadamia nuts', safe: true },
+                    { name: 'Pork (plain)', safe: true },
+                    { name: 'Beans/Lentils', safe: false },
+                    { name: 'Chickpeas', safe: false },
+                    { name: 'Processed meats', safe: false },
+                    { name: 'Cashews', safe: false },
+                ]
+            },
+            dairy: {
+                name: 'Dairy & Alternatives',
+                items: [
+                    { name: 'Almond milk', safe: true },
+                    { name: 'Oat milk (low lactose)', safe: true },
+                    { name: 'Rice milk', safe: true },
+                    { name: 'Lactose-free milk', safe: true },
+                    { name: 'Brie cheese', safe: true },
+                    { name: 'Feta cheese', safe: true },
+                    { name: 'Parmesan', safe: true },
+                    { name: 'Cheddar (hard cheese)', safe: true },
+                    { name: 'Butter', safe: true },
+                    { name: 'Cow\'s milk', safe: false },
+                    { name: 'Yogurt', safe: false },
+                    { name: 'Ice cream', safe: false },
+                    { name: 'Cream cheese', safe: false },
+                ]
+            },
+            grains: {
+                name: 'Grains & Bread',
+                items: [
+                    { name: 'Rice', safe: true },
+                    { name: 'Gluten-free bread', safe: true },
+                    { name: 'Oats (plain)', safe: true },
+                    { name: 'Pasta (white)', safe: true },
+                    { name: 'Corn', safe: true },
+                    { name: 'Quinoa', safe: true },
+                    { name: 'Tapioca', safe: true },
+                    { name: 'Wheat bread', safe: false },
+                    { name: 'Barley', safe: false },
+                    { name: 'Rye', safe: false },
+                    { name: 'Cereal (most)', safe: false },
+                ]
+            },
+            condiments: {
+                name: 'Condiments & Oils',
+                items: [
+                    { name: 'Olive oil', safe: true },
+                    { name: 'Garlic-infused oil', safe: true },
+                    { name: 'Soy sauce', safe: true },
+                    { name: 'Mayonnaise', safe: true },
+                    { name: 'Barbeque sauce', safe: true },
+                    { name: 'Salt & pepper', safe: true },
+                    { name: 'Herbs & spices', safe: true },
+                    { name: 'Honey', safe: false },
+                    { name: 'High fructose corn syrup', safe: false },
+                    { name: 'Garlic/onion sauce', safe: false },
+                ]
+            }
+        };
+        
+        const weeklyRecipes = [
+            {
+                day: 'Monday',
+                meal: 'Grilled Chicken with Rice & Carrots',
+                ingredients: ['Chicken breast', 'White rice', 'Carrots', 'Olive oil', 'Salt & pepper'],
+                instructions: 'Grill seasoned chicken, serve with steamed rice and roasted carrots.'
+            },
+            {
+                day: 'Tuesday',
+                meal: 'Fish Tacos with Lettuce Wraps',
+                ingredients: ['White fish', 'Lettuce leaves', 'Bell pepper', 'Lime juice', 'Salt'],
+                instructions: 'Pan-sear fish, wrap in lettuce with sliced peppers and lime.'
+            },
+            {
+                day: 'Wednesday',
+                meal: 'Gluten-Free Pasta Primavera',
+                ingredients: ['GF pasta', 'Zucchini', 'Carrots', 'Tomatoes', 'Olive oil'],
+                instructions: 'Cook pasta, toss with roasted vegetables and olive oil.'
+            },
+            {
+                day: 'Thursday',
+                meal: 'Scrambled Eggs & Rice Cakes',
+                ingredients: ['Eggs', 'Rice cakes', 'Tomatoes', 'Spinach', 'Butter'],
+                instructions: 'Scramble eggs with spinach, serve with rice cakes and tomatoes.'
+            },
+            {
+                day: 'Friday',
+                meal: 'Turkey Meatballs with Sweet Potato',
+                ingredients: ['Ground turkey', 'Rice breadcrumbs', 'Egg', 'Sweet potato', 'Carrot'],
+                instructions: 'Bake seasoned meatballs, serve with roasted sweet potato and carrot.'
+            },
+            {
+                day: 'Saturday',
+                meal: 'Grilled Pork with Green Beans',
+                ingredients: ['Pork tenderloin', 'Green beans', 'Potatoes', 'Olive oil', 'Herbs'],
+                instructions: 'Grill pork, serve with steamed green beans and roasted potatoes.'
+            },
+            {
+                day: 'Sunday',
+                meal: 'Rice Bowl with Tofu & Vegetables',
+                ingredients: ['Tofu', 'Rice', 'Cucumber', 'Carrot', 'Bell pepper', 'Soy sauce'],
+                instructions: 'Pan-fry tofu cubes, serve over rice with fresh vegetables and soy sauce.'
+            }
+        ];
+        
+        const symptoms = ['Bloating', 'Gas', 'Abdominal pain', 'Cramping', 'Diarrhea', 'Constipation', 'Nausea', 'Fatigue'];
+        
+        let trackerEntries = [];
+        let selectedSymptoms = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFoods();
+            renderRecipes();
+            renderSymptomButtons();
+            setupTabs();
+        });
+        
+        function renderFoods() {
+            const container = document.getElementById('food-categories');
+            container.innerHTML = '';
+            
+            Object.values(foodDatabase).forEach(category => {
+                const categoryEl = document.createElement('div');
+                categoryEl.className = 'food-category';
+                
+                let html = `<div class="category-header">${category.name}</div>`;
+                
+                category.items.forEach(item => {
+                    const safeClass = item.safe ? 'safe' : 'unsafe';
+                    html += `
+                        <div class="food-item ${safeClass}">
+                            <div class="food-badge ${safeClass}"></div>
+                            <div class="food-name">${item.name}</div>
+                        </div>
+                    `;
+                });
+                
+                categoryEl.innerHTML = html;
+                container.appendChild(categoryEl);
+            });
+        }
+        
+        function renderRecipes() {
+            const container = document.getElementById('recipes-list');
+            container.innerHTML = '';
+            
+            weeklyRecipes.forEach(recipe => {
+                const recipeEl = document.createElement('div');
+                recipeEl.className = 'recipe-card';
+                recipeEl.innerHTML = `
+                    <div class="recipe-day">${recipe.day}</div>
+                    <div class="recipe-meal">${recipe.meal}</div>
+                    <div class="recipe-ingredients">
+                        <div class="recipe-label">Ingredients:</div>
+                        <div>${recipe.ingredients.join(', ')}</div>
+                    </div>
+                    <div class="recipe-instructions">
+                        <div class="recipe-label">Instructions:</div>
+                        <div>${recipe.instructions}</div>
+                    </div>
+                `;
+                container.appendChild(recipeEl);
+            });
+        }
+        
+        function renderSymptomButtons() {
+            const container = document.getElementById('symptom-buttons');
+            container.innerHTML = '';
+            
+            symptoms.forEach(symptom => {
+                const btn = document.createElement('button');
+                btn.className = 'symptom-btn';
+                btn.textContent = symptom;
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    btn.classList.toggle('active');
+                    if (btn.classList.contains('active')) {
+                        selectedSymptoms.push(symptom);
+                    } else {
+                        selectedSymptoms = selectedSymptoms.filter(s => s !== symptom);
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+        
+        function logEntry() {
+            const mealInput = document.getElementById('mealInput');
+            const food = mealInput.value.trim();
+            
+            if (!food) return;
+            
+            const entry = {
+                id: Date.now(),
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                food: food,
+                symptoms: [...selectedSymptoms]
+            };
+            
+            trackerEntries.unshift(entry);
+            mealInput.value = '';
+            selectedSymptoms = [];
+            
+            // Reset buttons
+            document.querySelectorAll('.symptom-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            renderEntries();
+        }
+        
+        function renderEntries() {
+            const container = document.getElementById('entries-list');
+            
+            if (trackerEntries.length === 0) {
+                container.innerHTML = '<div class="empty-state">No entries yet. Start logging your meals!</div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            trackerEntries.forEach(entry => {
+                const entryEl = document.createElement('div');
+                entryEl.className = 'entry';
+                
+                let symptomsHtml = '';
+                if (entry.symptoms.length > 0) {
+                    symptomsHtml = '<div class="entry-symptoms">' + 
+                        entry.symptoms.map(s => `<span class="symptom-tag">${s}</span>`).join('') + 
+                        '</div>';
+                }
+                
+                entryEl.innerHTML = `
+                    <div class="entry-header">
+                        <div style="flex: 1;">
+                            <div class="entry-time">${entry.date} at ${entry.time}</div>
+                            <div class="entry-food">${entry.food}</div>
+                        </div>
+                        <button class="entry-delete" onclick="deleteEntry(${entry.id})">✕</button>
+                    </div>
+                    ${symptomsHtml}
+                `;
+                container.appendChild(entryEl);
+            });
+        }
+        
+        function deleteEntry(id) {
+            trackerEntries = trackerEntries.filter(e => e.id !== id);
+            renderEntries();
+        }
+        
+        function setupTabs() {
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabName = button.dataset.tab;
+                    
+                    // Update buttons
+                    document.querySelectorAll('.tab-button').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    button.classList.add('active');
+                    
+                    // Update content
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        pane.classList.remove('active');
+                    });
+                    document.getElementById(tabName).classList.add('active');
+                });
+            });
+        }
+        
+        // Allow Enter key in meal input
+        document.addEventListener('DOMContentLoaded', function() {
+            const mealInput = document.getElementById('mealInput');
+            if (mealInput) {
+                mealInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        logEntry();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
