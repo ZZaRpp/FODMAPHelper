@@ -12,14 +12,14 @@
   "author": "Master P",
   "license": "MIT",
   "dependencies": {
-    "pg": "^8.11.3",
+    "pg": "^8.11.0",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.1.2"
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.1"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": "18.x"
   }
 }
