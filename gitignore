@@ -1,0 +1,33 @@
+# Environment variables (NEVER commit)
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build outputs
+dist/
+build/
+.vercel/
+
+# Vercel
+.vercel
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
