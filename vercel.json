@@ -1,15 +1,7 @@
 {
   "buildCommand": "npm install",
-  "outputDirectory": "public",
   "env": {
-    "DATABASE_URL": "@DATABASE_URL",
-    "JWT_SECRET": "@JWT_SECRET",
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "api/**/*.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
+    "DATABASE_URL": "@database_url",
+    "JWT_SECRET": "@jwt_secret"
   }
 }
