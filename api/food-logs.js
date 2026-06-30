@@ -1,10 +1,5 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   FODMAP Helper - Vercel Serverless Function: Food Logs
-   Deploy to: /api/food-logs.js
-═══════════════════════════════════════════════════════════════════════ */
-
-const { Pool } = require('pg');
-const jwt = require('jsonwebtoken');
+import { Pool } from 'pg';
+import jwt from 'jsonwebtoken';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
