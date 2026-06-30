@@ -555,7 +555,7 @@
     </div>
 
     <script>
-        const API_URL = 'https://fodmap-helper-sigma.vercel.app/api'; // Change this to your Vercel URL
+        const API_URL = 'https://your-vercel-url.vercel.app/api'; // Change this to your Vercel URL
         let token = localStorage.getItem('token');
         let currentUser = null;
 
@@ -859,6 +859,10 @@
         if (token && localStorage.getItem('user')) {
             currentUser = JSON.parse(localStorage.getItem('user'));
             showDashboard();
+        } else {
+            // Show login form by default
+            document.getElementById('authSection').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
         }
     </script>
 </body>
