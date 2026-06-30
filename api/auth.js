@@ -9,7 +9,6 @@ const pool = new Pool({
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change-me-in-production';
 
-// Initialize database tables on first run
 async function initDatabase() {
   try {
     await pool.query(`
@@ -41,11 +40,10 @@ async function initDatabase() {
       );
     `);
   } catch (err) {
-    console.log('Tables already exist or error:', err.message);
+    // Tables already exist
   }
 }
 
-// Verify JWT token
 function verifyToken(token) {
   try {
     return jwt.verify(token, JWT_SECRET);
@@ -54,19 +52,18 @@ function verifyToken(token) {
   }
 }
 
-// Main handler
 export default async function handler(req, res) {
-  // Enable CORS
+  // CORS headers - allow all origins
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
+  
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
 
-  // Initialize database
   await initDatabase();
 
   const { method, url, body } = req;
@@ -80,7 +77,6 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'All fields required' });
       }
 
-      // Check if user exists
       const existing = await pool.query(
         'SELECT id FROM users WHERE email = $1 OR username = $2',
         [email, username]
@@ -90,11 +86,9 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'User already exists' });
       }
 
-      // Hash password
       const salt = await bcrypt.genSalt(10);
       const password_hash = await bcrypt.hash(password, salt);
 
-      // Create user
       const result = await pool.query(
         'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email',
         [username, email, password_hash]
