@@ -1,12 +1,6 @@
-
-/* ═══════════════════════════════════════════════════════════════════════
-   FODMAP Helper - Vercel Serverless Function: Authentication
-   Deploy to: /api/auth.js
-═══════════════════════════════════════════════════════════════════════ */
-
-const { Pool } = require('pg');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import { Pool } from 'pg';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -75,12 +69,12 @@ export default async function handler(req, res) {
   // Initialize database
   await initDatabase();
 
-  const { method, url } = req;
+  const { method, url, body } = req;
 
   try {
     // REGISTER
     if (url.includes('/register') && method === 'POST') {
-      const { username, email, password } = req.body;
+      const { username, email, password } = body;
 
       if (!username || !email || !password) {
         return res.status(400).json({ error: 'All fields required' });
@@ -114,7 +108,7 @@ export default async function handler(req, res) {
 
     // LOGIN
     if (url.includes('/login') && method === 'POST') {
-      const { email, password } = req.body;
+      const { email, password } = body;
 
       if (!email || !password) {
         return res.status(400).json({ error: 'Email and password required' });
