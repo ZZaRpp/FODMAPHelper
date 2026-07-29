@@ -398,6 +398,9 @@
 <body>
     <!-- AUTH SECTION -->
     <div id="authSection" class="auth-container">
+        <div style="position: absolute; top: 20px; left: 20px;">
+            <a href="index.html" style="color: #4A7C59; text-decoration: none; font-weight: 600; font-size: 14px;">← Back to Home</a>
+        </div>
         <div class="auth-box">
             <div id="loginForm">
                 <h1>Welcome Back</h1>
@@ -455,7 +458,9 @@
     <div id="dashboard" class="dashboard">
         <nav class="navbar">
             <div class="navbar-content">
-                <div class="navbar-brand">🥗 FODMAP Helper</div>
+                <div style="display: flex; align-items: center; gap: 30px;">
+                    <a href="index.html" class="navbar-brand" style="text-decoration: none; cursor: pointer;">🥗 FODMAP Helper</a>
+                </div>
                 <div class="user-info">
                     <span id="currentUser"></span>
                     <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -555,7 +560,7 @@
     </div>
 
     <script>
-        const API_URL = 'https://fodmap-helper-sigma.vercel.app/api'; // Change this to your Vercel URL
+        const API_URL = 'https://fodmap-helper-sigma.vercel.app/api';
         let token = localStorage.getItem('token');
         let currentUser = null;
 
